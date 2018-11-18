@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.elisios.detalhesdousuarioapp.MainActivity;
 import com.example.elisios.detalhesdousuarioapp.R;
 import com.example.elisios.detalhesdousuarioapp.interfaces.UserListener;
 import com.example.elisios.detalhesdousuarioapp.pojo.User;
@@ -33,6 +34,7 @@ public class UserDetalheFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         this.listener = (UserListener) context;
+        this.user = (User) getArguments().getSerializable(MainActivity.OBJ_USER);
     }
 
     @Override
@@ -43,13 +45,12 @@ public class UserDetalheFragment extends Fragment {
 
         emailRequerido = view.findViewById(R.id.detail_email_id);
         setUser();
-        getArguments().getSerializable(OBJ_USER);
 
         return view;
     }
 
     private void setUser(){
-        user.getEmail();
+        emailRequerido.setText(user.getEmail());
     }
 
 }
