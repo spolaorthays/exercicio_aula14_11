@@ -9,12 +9,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.elisios.detalhesdousuarioapp.R;
 import com.example.elisios.detalhesdousuarioapp.adapter.RecyclerViewUserAdapter;
 import com.example.elisios.detalhesdousuarioapp.interfaces.RecyclerListenerUser;
 import com.example.elisios.detalhesdousuarioapp.interfaces.UserListener;
+import com.example.elisios.detalhesdousuarioapp.model.ResponseUsersDAO;
+import com.example.elisios.detalhesdousuarioapp.pojo.ResponseUser;
 import com.example.elisios.detalhesdousuarioapp.pojo.User;
+import com.example.elisios.detalhesdousuarioapp.service.ServiceUserListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,11 +26,12 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ListaUsersFragment extends Fragment implements RecyclerListenerUser {
+public class ListaUsersFragment extends Fragment implements RecyclerListenerUser, ServiceUserListener {
 
     private RecyclerView recyclerView;
     private RecyclerViewUserAdapter adapter;
     private UserListener listener;
+    private List<User> userList;
 
     public ListaUsersFragment() {
         // Required empty public constructor
@@ -46,12 +51,17 @@ public class ListaUsersFragment extends Fragment implements RecyclerListenerUser
 
         recyclerView = view.findViewById(R.id.recycler_users_id);
 
-        createRecycler(getUsersList());
+        ResponseUsersDAO usersDAO = new ResponseUsersDAO();
+
+        userList = usersDAO.getUsersCall(this);
+
+        createRecycler(userList);
 
         return view;
     }
 
     private void createRecycler (List<User> userList){
+
         //Coloca a lista dentro do recycler
         adapter = new RecyclerViewUserAdapter(userList, this);
         recyclerView.setAdapter(adapter);
@@ -95,5 +105,16 @@ public class ListaUsersFragment extends Fragment implements RecyclerListenerUser
     @Override
     public void onUserClicado(User user) {
         listener.iniciarFragmentDetalheUser(user);
+    }
+
+    @Override
+    public void onSucess(Object object) {
+        userList = (List<User>) object;
+        adapter.addUserList(userList);
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+        Toast.makeText(getContext(),throwable.getMessage(),Toast.LENGTH_LONG).show();
     }
 }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.elisios.detalhesdousuarioapp.R;
 import com.example.elisios.detalhesdousuarioapp.interfaces.RecyclerListenerUser;
+import com.example.elisios.detalhesdousuarioapp.pojo.ResponseUser;
 import com.example.elisios.detalhesdousuarioapp.pojo.User;
 
 import java.util.List;
@@ -44,6 +45,11 @@ public class RecyclerViewUserAdapter extends RecyclerView.Adapter<RecyclerViewUs
     @Override
     public int getItemCount() {
         return userList.size();
+    }
+
+    public void addUserList (List<User> userList){
+        this.userList.addAll(userList);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
